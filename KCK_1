@@ -1,0 +1,62 @@
+import matplotlib.pyplot as plt
+import csv
+import statistics
+
+fig, (ax1, ax2) = plt.subplots(1, 2)
+fig.suptitle('Sprawozdanie nr.1 ')
+csfont = {'fontname':'Times New Roman'}
+ww=[]
+plt.xticks(rotation=30)
+cc = 0
+f_x = []
+x = []
+ax1.set_xlabel('Rozegranych gier (x1000)', **csfont)
+ax1.set_ylabel('Odsetek wygranych gier [%]', **csfont)
+boxbox=[]
+files = ['/dane/rsel.csv','/dane/cel.csv','/dane/cel-rs.csv','/dane/2cel.csv'
+		 ,'/dane/2cel-rs.csv']
+
+
+for file in files:
+	ww=[]
+	temp_box=[]
+	temp_y=[]
+	temp_x = []
+	cc=0
+	with open(file, 'r', encoding='utf-8') as csvfile:
+		csvreader = csv.reader(csvfile, delimiter=',')
+		for row in csvreader:
+			if cc == 0:
+				cc=1
+				continue
+			for k in range (32):
+				ww.append(float(row[k+2]))
+			temp_x.append(int(row[1])/1000)
+			temp_y.append(100*statistics.mean(ww[0:]))
+			if int(row[0]) == 199:
+				for k in range (32):
+					temp_box.append(100*float(row[k+2]))
+
+				boxbox.append(temp_box)
+				temp_box = []
+			ww=[]
+		f_x.append(temp_y)
+		x.append(temp_x)
+
+colors =['blue', 'black','green','pink','red']
+labels =['1-Evol-RS','1-Coev','1-Coev-RS','2-Coev','2-Coev-RS']
+markers = ['o','s','v','D','d']
+for k in range (5):
+	ax1.plot(x[k],f_x[k],label = labels[k] ,color = colors[k] ,marker = markers[k],markevery=40 ,linewidth=0.5)
+ax2.boxplot(boxbox,notch = True , showmeans= True ,sym="+" , bootstrap=10000, showfliers=True, labels= labels,
+			flierprops=dict(markerfacecolor='blue',markeredgecolor='blue'),
+			whiskerprops=dict(color='blue',linestyle='--'),
+			meanprops=dict(marker='o',markerfacecolor='blue'))
+ax1.legend()
+ax1.secondary_xaxis('top',functions=(
+lambda x: x * 4 / 10,
+lambda x: x / 4 * 10
+)).set_xlabel('Pokolenie', **csfont)
+ax1.grid(linestyle ="--")
+ax2.grid(linestyle ="--")
+plt.show()
