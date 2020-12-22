@@ -1,4 +1,4 @@
-# import the necessary packages
+
 import imutils
 import cv2
 
@@ -71,7 +71,7 @@ def perspektywa(image, c):
     dist = (extBot[0] - extLeft[0]) ** 2 + (extBot[0] - extLeft[0]) ** 2
     dist2 = (extTop[0] - extBot[0]) ** 2 + (extTop[0] - extBot[0]) ** 2
 
-    # show the output image
+
     pts1 = np.float32([list(extLeft), list(extTop), list(extBot), list(extRight)])
     pts2 = np.float32([[250, 400], [0, 400], [250, 0], [0, 0]])
     matrix = cv2.getPerspectiveTransform(pts1, pts2)
@@ -85,13 +85,11 @@ def karta(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     gray = cv2.GaussianBlur(gray, (5, 5), 0)
-    # threshold the image, then perform a series of erosions +
-    # dilations to remove any small regions of noise
+
     thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)[1]
     thresh = cv2.erode(thresh, None, iterations=2)
     thresh = cv2.dilate(thresh, None, iterations=2)
-    # find contours in thresholded image, then grab the largest
-    # one
+
     cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
                             cv2.CHAIN_APPROX_SIMPLE)
     cnts = imutils.grab_contours(cnts)
@@ -104,11 +102,11 @@ def karta(image):
     ww = []
     ss = []
     for c in good:
-        # compute the center of the contour
+
         M = cv2.moments(c)
         cX = int(M["m10"] / M["m00"])
         cY = int(M["m01"] / M["m00"])
-        # draw the contour and center of the shape on the image
+
         ss.append((cX, cY))
         ww.append(perspektywa(image, c))
     return (ww, ss)
@@ -120,13 +118,10 @@ def figura(imgoutput):
     gray1 = cv2.GaussianBlur(gray1, (5, 5), 0)
     gray1 = cv2.Canny(gray1, 25, 200)
 
-    # threshold the image, then perform a series of erosions +
-    # dilations to remove any small regions of noise
     thresh1 = cv2.threshold(gray1, 180, 255, cv2.THRESH_BINARY)[1]
 
     cv2.waitKey(0)
-    # find contours in thresholded image, then grab the largest
-    # one
+
     pp = pp[5:70, 0:45]
     cropped = thresh1[5:70, 0:45]
     cropped = cv2.resize(cropped, (200, 240), interpolation=cv2.INTER_AREA)
@@ -184,8 +179,7 @@ def test(image):
     gray1 = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray1 = cv2.GaussianBlur(gray1, (5, 5), 0)
 
-    # threshold the image, then perform a series of erosions +
-    # dilations to remove any small regions of noise
+
     thresh1 = cv2.threshold(gray1, 165, 255, cv2.THRESH_BINARY)[1]
 
 
@@ -193,8 +187,7 @@ def get_comp(imgare):
     gray1 = cv2.cvtColor(imgare, cv2.COLOR_BGR2GRAY)
     gray1 = cv2.GaussianBlur(gray1, (5, 5), 0)
 
-    # threshold the image, then perform a series of erosions +
-    # dilations to remove any small regions of noise
+
     thresh1 = cv2.threshold(gray1, 165, 255, cv2.THRESH_BINARY)[1]
 
     return thresh1
@@ -206,13 +199,10 @@ def check_znak(image):
     gray1 = cv2.GaussianBlur(gray1, (5, 5), 0)
     gray1 = cv2.Canny(gray1, 25, 200)
 
-    # threshold the image, then perform a series of erosions +
-    # dilations to remove any small regions of noise
     thresh1 = cv2.threshold(gray1, 180, 255, cv2.THRESH_BINARY)[1]
 
     cv2.waitKey(0)
-    # find contours in thresholded image, then grab the largest
-    # one
+
     pp = pp[50:110, 0:40]
     cropped = thresh1[50:110, 0:40]
     cropped = cv2.resize(cropped, (200, 240), interpolation=cv2.INTER_AREA)
@@ -266,8 +256,6 @@ def wynik_znak(image1):
     return max, wynik
 
 
-# from skimage.measure import compare_ssim
-# load the image, convert it to grayscale, and blur it slightly
 easy = ["C:/Users/48781/Desktop/medium/12.jpg",
         "C:/Users/48781/Desktop/easy/1.jpg",
         "C:/Users/48781/Desktop/easy/2.jpg",
